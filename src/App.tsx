@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import './styles/App.css';
+import NavHeader from "./components/NavHeader";
+import PageFooter from "./components/PageFooter";
+import { Layout } from "antd";
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* 头部 */}
+      <Header>
+        <NavHeader />
+      </Header>
+      {/* 路由页面 */}
+      <Content></Content>
+      {/* 底部 */}
+      <Footer>
+        <PageFooter />
+      </Footer>
     </div>
   );
 }
