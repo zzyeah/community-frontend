@@ -1,8 +1,9 @@
 import React from "react";
-import './styles/App.css';
+import "./styles/App.css";
 import NavHeader from "./components/NavHeader";
 import PageFooter from "./components/PageFooter";
 import { Layout } from "antd";
+import RouteConfig from "./router";
 
 const { Header, Content, Footer } = Layout;
 
@@ -14,9 +15,11 @@ function App() {
         <NavHeader />
       </Header>
       {/* 路由页面 */}
-      <Content></Content>
+      <Content className="content">
+        <RouteConfig></RouteConfig>
+      </Content>
       {/* 底部 */}
-      <Footer>
+      <Footer className="footer">
         <PageFooter />
       </Footer>
     </div>
