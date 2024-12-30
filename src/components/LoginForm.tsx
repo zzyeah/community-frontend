@@ -10,7 +10,14 @@ import {
   RadioChangeEvent,
   Row,
 } from "antd";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { getCaptcha } from "../api/user";
 import styles from "../styles/LoginForm.module.css";
 
 export interface LoginFormProps {
@@ -63,6 +70,10 @@ function LoginForm(props: LoginFormProps) {
 
   const [captcha, setCaptcha] = useState<string>(null);
 
+  useEffect(() => {
+    captchaClickHandle();
+  }, [props.isShow]);
+
   function handleOk(): void {
     throw new Error("Function not implemented.");
   }
@@ -75,6 +86,15 @@ function LoginForm(props: LoginFormProps) {
     throw new Error("Function not implemented.");
   }
 
+  function registerHandle(values: any): void {
+    throw new Error("Function not implemented.");
+  }
+
+  async function captchaClickHandle() {
+    const result = await getCaptcha();
+    setCaptcha(result);
+  }
+
   function updateInfo<T extends IBaseInfo, K extends keyof T>(
     loginInfo: T,
     value: T[K],
@@ -84,10 +104,6 @@ function LoginForm(props: LoginFormProps) {
     const obj = { ...loginInfo };
     obj[key] = value;
     setLoginInfo(obj);
-  }
-
-  function captchaClickHandle(): void {
-    throw new Error("Function not implemented.");
   }
 
   function LoginContainer() {
@@ -218,14 +234,6 @@ function LoginForm(props: LoginFormProps) {
   }
 
   function RegisterContainer() {
-    function registerHandle(values: any): void {
-      throw new Error("Function not implemented.");
-    }
-
-    function captchaClickHandle(): void {
-      throw new Error("Function not implemented.");
-    }
-
     return (
       <div className={styles.container}>
         <Form
