@@ -1,5 +1,6 @@
-import { Button, Input, Select, Space } from "antd";
+import { Input, Select, Space } from "antd";
 import { NavLink } from "react-router-dom";
+import LoginAvatar from "./LoginAvatar";
 const { Search } = Input;
 const options = [
   {
@@ -11,7 +12,9 @@ const options = [
     label: "书籍",
   },
 ];
-function NavHeader() {
+function NavHeader(props) {
+
+  
   return (
     <div className="headerContainer">
       {/* 头部logo */}
@@ -60,9 +63,7 @@ function NavHeader() {
       </div>
       {/* 登陆按钮 */}
       <div className="loginBtnContainer">
-        <Button type="primary" size="large">
-          注册/登录
-        </Button>
+        <LoginAvatar loginHandle={props.loginHandle}/>
       </div>
     </div>
   );

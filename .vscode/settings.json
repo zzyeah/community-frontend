@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "user"
+        "user",
+        "Login"
     ]
 }
