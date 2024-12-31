@@ -1,24 +1,30 @@
 import {
   Button,
   Checkbox,
+  CheckboxChangeEvent,
   Col,
   Form,
   FormInstance,
   Input,
+  message,
   Modal,
   Radio,
   RadioChangeEvent,
   Row,
 } from "antd";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { getCaptcha } from "../api/user";
+import { useEffect, useState } from "react";
+import { getCaptcha, register, userIsExist } from "../api/user";
 import styles from "../styles/LoginForm.module.css";
+import { RuleObject } from "antd/es/form";
+import { StoreValue } from "antd/es/form/interface";
+import {
+  LoginInfo,
+  RegisterInfo,
+  IBaseInfo,
+} from "../types/loginForm/userInfo.interface";
+import { UserRegisterRequest } from "../types/api/user/userRegister.request";
+import { useDispatch } from "react-redux";
+import { initUserInfo } from "@/redux/user/userSlice";
 
 export interface LoginFormProps {
   isShow: boolean;
@@ -30,28 +36,15 @@ export enum LoginFormRadioButtonTypes {
   REGISTER,
 }
 
-export interface IBaseInfo {
-  loginId: string;
-  captcha: string;
-}
-
-export interface LoginInfo extends IBaseInfo {
-  loginPwd: string;
-  remember: boolean;
-}
-
-export interface RegisterInfo extends IBaseInfo {
-  nickname: string;
-}
-
 function LoginForm(props: LoginFormProps) {
   const { isShow, closeModal } = props;
   const { Group: RadioGroup, Button: RadioButton } = Radio;
   const { Item: FormItem } = Form;
   const { Password } = Input;
   const [value, setValue] = useState(LoginFormRadioButtonTypes.LOGIN);
-  const loginFormRef = useRef<FormInstance>();
-  const registerFormRef = useRef<FormInstance>();
+  const [loginForm] = Form.useForm<LoginInfo>();
+  const [registerForm] = Form.useForm<RegisterInfo>();
+  const dispatch = useDispatch();
 
   // 登录表单的状态数据
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
@@ -83,11 +76,21 @@ function LoginForm(props: LoginFormProps) {
     setValue(value);
   }
   function loginHandle(values: any): void {
-    throw new Error("Function not implemented.");
+    console.log(values);
   }
 
-  function registerHandle(values: any): void {
-    throw new Error("Function not implemented.");
+  async function registerHandle(values: any) {
+    const req = new UserRegisterRequest(values);
+    const result = await register(req);
+    if (result.data) {
+      message.success('用户注册成功，默认密码为123456');
+      // 存储到数据仓库里面
+      dispatch(initUserInfo(result.data));
+      
+    } else {
+      message.warning(result.msg);
+      captchaClickHandle();
+    }
   }
 
   async function captchaClickHandle() {
@@ -95,15 +98,23 @@ function LoginForm(props: LoginFormProps) {
     setCaptcha(result);
   }
 
-  function updateInfo<T extends IBaseInfo, K extends keyof T>(
-    loginInfo: T,
-    value: T[K],
+  async function checkLoginIdIsExist(_: RuleObject, value: StoreValue) {
+    if (value) {
+      const { data } = await userIsExist(value);
+      if (data) {
+        throw new Error("用户名已存在");
+      }
+    }
+  }
+
+  function handleFormValueChange<T extends IBaseInfo, K extends keyof T>(
+    form: FormInstance<T>,
     key: K,
-    setLoginInfo: Dispatch<SetStateAction<T>>
-  ): void {
-    const obj = { ...loginInfo };
+    value: T[K]
+  ) {
+    const obj: any = { ...form.getFieldsValue() };
     obj[key] = value;
-    setLoginInfo(obj);
+    form.setFieldsValue(obj);
   }
 
   function LoginContainer() {
@@ -113,7 +124,8 @@ function LoginForm(props: LoginFormProps) {
           name="basic1"
           autoComplete="off"
           onFinish={loginHandle}
-          ref={loginFormRef}
+          form={loginForm}
+          initialValues={loginInfo}
         >
           <FormItem
             label="登录账号"
@@ -125,13 +137,7 @@ function LoginForm(props: LoginFormProps) {
               },
             ]}
           >
-            <Input
-              placeholder="请输入你的登录账号"
-              value={loginInfo.loginId}
-              onChange={(e) =>
-                updateInfo(loginInfo, e.target.value, "loginId", setLoginInfo)
-              }
-            />
+            <Input placeholder="请输入你的登录账号" />
           </FormItem>
 
           <FormItem
@@ -144,18 +150,12 @@ function LoginForm(props: LoginFormProps) {
               },
             ]}
           >
-            <Password
-              placeholder="请输入你的登录密码，新用户默认为123456"
-              value={loginInfo.loginPwd}
-              onChange={(e) =>
-                updateInfo(loginInfo, e.target.value, "loginPwd", setLoginInfo)
-              }
-            />
+            <Password placeholder="请输入你的登录密码，新用户默认为123456" />
           </FormItem>
 
           {/* 验证码 */}
           <FormItem
-            name="logincaptcha"
+            name="captcha"
             label="验证码"
             rules={[
               {
@@ -168,14 +168,8 @@ function LoginForm(props: LoginFormProps) {
               <Col span={16}>
                 <Input
                   placeholder="请输入验证码"
-                  value={loginInfo.captcha}
                   onChange={(e) =>
-                    updateInfo(
-                      loginInfo,
-                      e.target.value,
-                      "captcha",
-                      setLoginInfo
-                    )
+                    handleFormValueChange(loginForm, "captcha", e.target.value)
                   }
                 />
               </Col>
@@ -197,15 +191,10 @@ function LoginForm(props: LoginFormProps) {
             }}
           >
             <Checkbox
-              onChange={(e) =>
-                updateInfo(
-                  loginInfo,
-                  e.target.checked,
-                  "remember",
-                  setLoginInfo
-                )
+              onChange={(e: CheckboxChangeEvent) =>
+                handleFormValueChange(loginForm, "remember", e.target.checked)
               }
-              checked={loginInfo.remember}
+              checked={loginForm.getFieldInstance("remember")}
             >
               记住我
             </Checkbox>
@@ -239,8 +228,9 @@ function LoginForm(props: LoginFormProps) {
         <Form
           name="basic2"
           autoComplete="off"
-          ref={registerFormRef}
+          form={registerForm}
           onFinish={registerHandle}
+          initialValues={registerInfo}
         >
           <FormItem
             label="登录账号"
@@ -251,41 +241,25 @@ function LoginForm(props: LoginFormProps) {
                 message: "请输入账号，仅此项为必填项",
               },
               // 验证用户是否已经存在
-              // { validator: checkLoginIdIsExist },
+              { validator: checkLoginIdIsExist },
             ]}
             validateTrigger="onBlur"
+            validateDebounce={100}
           >
             <Input
               placeholder="请输入账号"
-              value={registerInfo.loginId}
-              onChange={(e) =>
-                updateInfo(
-                  registerInfo,
-                  e.target.value,
-                  "loginId",
-                  setRegisterInfo
-                )
-              }
+              onBlur={() => {
+                console.log("blur");
+              }}
             />
           </FormItem>
 
           <FormItem label="用户昵称" name="nickname">
-            <Input
-              placeholder="请输入昵称，不填写默认为新用户xxx"
-              value={registerInfo.nickname}
-              onChange={(e) =>
-                updateInfo(
-                  registerInfo,
-                  e.target.value,
-                  "nickname",
-                  setRegisterInfo
-                )
-              }
-            />
+            <Input placeholder="请输入昵称，不填写默认为新用户xxx" />
           </FormItem>
 
           <FormItem
-            name="registercaptcha"
+            name="captcha"
             label="验证码"
             rules={[
               {
@@ -298,13 +272,11 @@ function LoginForm(props: LoginFormProps) {
               <Col span={16}>
                 <Input
                   placeholder="请输入验证码"
-                  value={registerInfo.captcha}
                   onChange={(e) =>
-                    updateInfo(
-                      registerInfo,
-                      e.target.value,
+                    handleFormValueChange(
+                      registerForm,
                       "captcha",
-                      setRegisterInfo
+                      e.target.value
                     )
                   }
                 />

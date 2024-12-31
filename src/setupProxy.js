@@ -7,4 +7,12 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+
+  app.use(
+    "/api",
+    createProxyMiddleware({
+      target: "http://localhost:4015/api",
+      changeOrigin: true,
+    })
+  );
 };

@@ -19,7 +19,12 @@ const userSlice = createSlice({
     userInfo: {},
   },
   reducers: {
-    initUserInfo() {},
+    initUserInfo: (state, { payload }) => {
+      state.userInfo = payload;
+    },
+    changeLoginStatus: (state, { payload }) => {
+      state.isLogin = payload;
+    },
   },
 });
 
