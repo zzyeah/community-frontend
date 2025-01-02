@@ -23,15 +23,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "@styles/*": [
-        "src/styles/*"
-      ],
-      "@types/*": [
-        "src/types/*"
-      ],
-      "@redux/*": [
-        "src/redux/*"
       ]
     }
   },
@@ -42,6 +33,6 @@
   ],
   "extends": [
     "./path.json",
-    "./node_modules/**/*"
+    "node_modules/**/*"
   ]
 }
