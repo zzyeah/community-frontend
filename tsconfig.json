@@ -19,12 +19,29 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ],
+      "@redux/*": [
+        "src/redux/*"
+      ]
+    }
   },
   "include": [
     "src/**/*",
-    "public/**/*"
+    "public/**/*",
+    "./**/*.ts"
   ],
   "extends": [
-    "./path.json"
+    "./path.json",
+    "./node_modules/**/*"
   ]
 }

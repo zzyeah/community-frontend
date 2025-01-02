@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { getCaptcha, register, userIsExist } from "../api/user";
-import styles from "../styles/LoginForm.module.css";
+import styles from "@styles/LoginForm.module.css";
 import { RuleObject } from "antd/es/form";
 import { StoreValue } from "antd/es/form/interface";
 import {

@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "user",
         "Login",
-        "Proxy"
+        "Proxy",
+        "Config"
     ]
 }
