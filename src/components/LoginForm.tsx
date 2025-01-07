@@ -13,18 +13,19 @@ import {
   Row,
 } from "antd";
 import { useEffect, useState } from "react";
-import { getCaptcha, register, userIsExist } from "../api/user";
+import { getCaptcha, login, register, userIsExist } from "../api/user";
 import styles from "@/styles/LoginForm.module.css";
 import { RuleObject } from "antd/es/form";
 import { StoreValue } from "antd/es/form/interface";
 import {
-  LoginInfo,
-  RegisterInfo,
+  UserLoginInfo,
+  UserRegisterInfo,
   IBaseInfo,
 } from "../types/loginForm/userInfo.interface";
 import { UserRegisterRequest } from "../types/api/user/userRegister.request";
 import { useDispatch } from "react-redux";
-import { initUserInfo } from "@/redux/user/userSlice";
+import { changeLoginStatus, initUserInfo } from "@/redux/user/userSlice";
+import { UserLoginRequest } from "@/types/api/user/userLogin.request";
 
 export interface LoginFormProps {
   isShow: boolean;
@@ -41,13 +42,13 @@ function LoginForm(props: LoginFormProps) {
   const { Group: RadioGroup, Button: RadioButton } = Radio;
   const { Item: FormItem } = Form;
   const { Password } = Input;
-  const [value, setValue] = useState(LoginFormRadioButtonTypes.LOGIN);
-  const [loginForm] = Form.useForm<LoginInfo>();
-  const [registerForm] = Form.useForm<RegisterInfo>();
+  const [formType, setFormType] = useState(LoginFormRadioButtonTypes.LOGIN);
+  const [loginForm] = Form.useForm<UserLoginInfo>();
+  const [registerForm] = Form.useForm<UserRegisterInfo>();
   const dispatch = useDispatch();
 
   // 登录表单的状态数据
-  const [loginInfo, setLoginInfo] = useState<LoginInfo>({
+  const [loginInfo] = useState<UserLoginInfo>({
     loginId: "",
     loginPwd: "",
     captcha: "",
@@ -55,13 +56,18 @@ function LoginForm(props: LoginFormProps) {
   });
 
   // 注册表单的状态数据
-  const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({
+  const [registerInfo] = useState<UserRegisterInfo>({
     loginId: "",
     nickname: "",
     captcha: "",
   });
 
   const [captcha, setCaptcha] = useState<string>(null);
+
+  async function captchaClickHandle() {
+    const result = await getCaptcha();
+    setCaptcha(result);
+  }
 
   useEffect(() => {
     captchaClickHandle();
@@ -73,29 +79,64 @@ function LoginForm(props: LoginFormProps) {
 
   function onChange(e: RadioChangeEvent) {
     const { value } = e.target;
-    setValue(value);
+    setFormType(value);
   }
-  function loginHandle(values: any): void {
-    console.log(values);
+
+  function loginFormCancel() {
+    loginForm.resetFields();
+  }
+
+  function registerFormCancel() {
+    registerForm.resetFields();
+  }
+
+  function handleCancel() {
+    loginFormCancel();
+    registerFormCancel();
+    closeModal();
+  }
+
+  async function loginHandle(values: UserLoginInfo) {
+    const req = new UserLoginRequest(values);
+    const res = await login(req);
+    if (res.code === 0) {
+      const { data } = res;
+      if (!data) {
+        // 账号密码不正确
+        message.error("账号或密码不正确");
+        captchaClickHandle();
+      } else if (!data.enabled) {
+        // 账号被禁用了
+        message.warning("账号被禁用");
+        captchaClickHandle();
+      } else {
+        // 说明账号密码正确，能够登录
+        // 将用户的信息存储到状态仓库，方便后面使用
+        dispatch(initUserInfo(data));
+        dispatch(changeLoginStatus(true));
+        handleCancel();
+      }
+    } else {
+      message.warning(res.msg);
+      captchaClickHandle();
+    }
   }
 
   async function registerHandle(values: any) {
     const req = new UserRegisterRequest(values);
     const result = await register(req);
-    if (result.data) {
-      message.success('用户注册成功，默认密码为123456');
+    if (result.code === 0) {
+      message.success("用户注册成功，默认密码为123456");
       // 存储到数据仓库里面
       dispatch(initUserInfo(result.data));
-      
+      // 更新登陆状态
+      dispatch(changeLoginStatus(true));
+      // 关闭登陆弹出框
+      handleCancel();
     } else {
       message.warning(result.msg);
       captchaClickHandle();
     }
-  }
-
-  async function captchaClickHandle() {
-    const result = await getCaptcha();
-    setCaptcha(result);
   }
 
   async function checkLoginIdIsExist(_: RuleObject, value: StoreValue) {
@@ -120,7 +161,7 @@ function LoginForm(props: LoginFormProps) {
   function LoginContainer() {
     return (
       <div className={styles.container}>
-        <Form
+        <Form<UserLoginInfo>
           name="basic1"
           autoComplete="off"
           onFinish={loginHandle}
@@ -213,7 +254,7 @@ function LoginForm(props: LoginFormProps) {
             >
               登录
             </Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="reset">
               重置
             </Button>
           </FormItem>
@@ -230,6 +271,7 @@ function LoginForm(props: LoginFormProps) {
           autoComplete="off"
           form={registerForm}
           onFinish={registerHandle}
+          onReset={registerFormCancel}
           initialValues={registerInfo}
         >
           <FormItem
@@ -246,12 +288,7 @@ function LoginForm(props: LoginFormProps) {
             validateTrigger="onBlur"
             validateDebounce={100}
           >
-            <Input
-              placeholder="请输入账号"
-              onBlur={() => {
-                console.log("blur");
-              }}
-            />
+            <Input placeholder="请输入账号" />
           </FormItem>
 
           <FormItem label="用户昵称" name="nickname">
@@ -304,7 +341,7 @@ function LoginForm(props: LoginFormProps) {
             >
               注册
             </Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="reset">
               重置
             </Button>
           </FormItem>
@@ -313,11 +350,11 @@ function LoginForm(props: LoginFormProps) {
     );
   }
 
-  let container = null;
-  if (value === LoginFormRadioButtonTypes.LOGIN) {
-    container = <LoginContainer />;
-  } else {
-    container = <RegisterContainer />;
+  function FormContent() {
+    if (formType === LoginFormRadioButtonTypes.LOGIN) {
+      return <LoginContainer />;
+    }
+    return <RegisterContainer />;
   }
 
   return (
@@ -329,7 +366,7 @@ function LoginForm(props: LoginFormProps) {
         onCancel={closeModal}
       >
         <RadioGroup
-          value={value}
+          value={formType}
           onChange={onChange}
           className={styles.radioGroup}
           buttonStyle="solid"
@@ -348,7 +385,7 @@ function LoginForm(props: LoginFormProps) {
           </RadioButton>
         </RadioGroup>
         {/* 下面需要显示对应功能的表单 */}
-        {container}
+        <FormContent />
       </Modal>
     </div>
   );

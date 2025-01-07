@@ -1,14 +1,16 @@
 export interface IBaseInfo {
-    loginId: string;
-    captcha: string;
-  }
-  
-  export interface LoginInfo extends IBaseInfo {
-    loginPwd: string;
-    remember: boolean;
-  }
-  
-  export interface RegisterInfo extends IBaseInfo {
-    nickname: string;
-  }
-  
+  loginId: string;
+  captcha: string;
+}
+
+export interface UserLoginInfoBase extends IBaseInfo {
+  loginPwd: string;
+}
+
+export interface UserLoginInfo extends UserLoginInfoBase {
+  remember: boolean;
+}
+
+export interface UserRegisterInfo extends IBaseInfo {
+  nickname: string;
+}

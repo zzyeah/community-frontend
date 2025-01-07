@@ -1,4 +1,4 @@
-import { RegisterInfo } from "@/types/loginForm/userInfo.interface";
+import { UserRegisterInfo } from "@/types/loginForm/userInfo.interface";
 
 export interface IUserRegisterRequest {
   loginId: string;
@@ -14,7 +14,7 @@ export class UserRegisterRequest implements IUserRegisterRequest {
   public name: string;
   public captcha: string;
   public avatar?: string;
-  constructor(registerInfo: RegisterInfo) {
+  constructor(registerInfo: UserRegisterInfo) {
     this.loginId = registerInfo.loginId;
     this.loginPwd = "123456";
     this.name = registerInfo.nickname;

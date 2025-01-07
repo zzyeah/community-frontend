@@ -15,4 +15,12 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+
+  app.use(
+    "/static",
+    createProxyMiddleware({
+      target: "http://localhost:4015/static",
+      changeOrigin: true,
+    })
+  );
 };

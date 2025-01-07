@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/App.css";
 import NavHeader from "./components/NavHeader";
 import PageFooter from "./components/PageFooter";
-import { Layout } from "antd";
+import { Layout, message } from "antd";
 import RouteConfig from "./router";
 import LoginForm from "./components/LoginForm";
+import { getInfo, getUserById } from "./api/user";
+import { Local_Authorization } from "./types/localStorage/keys.constant";
+import { useDispatch } from "react-redux";
+import { changeLoginStatus, initUserInfo } from "./redux/user/userSlice";
 
 const { Header, Content, Footer } = Layout;
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  // 系统加载的时候，需要恢复用户登陆状态
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getInfo();
+      if (result.data) {
+        const { data } = await getUserById(result.data.id);
+        // 存储用户信息
+        dispatch(initUserInfo(data));
+        dispatch(changeLoginStatus(true));
+      } else {
+        message.warning(result.msg);
+        localStorage.removeItem(Local_Authorization);
+      }
+    }
+    const authorization = localStorage.getItem(Local_Authorization);
+
+    if (authorization) fetchData();
+  }, [dispatch]);
 
   function closeModal() {
     setIsModalOpen(false);
