@@ -10,14 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "../styles/LoginAvatar.module.css";
 import { Local_Authorization } from "@/_index";
 import { useNavigate } from "react-router-dom";
+import { LoginAvatarListItem } from "@/types/loginAvatar/loginAvatarItemList.enum";
 
 export interface LoginAvatarProps {
   loginHandle: () => void;
-}
-
-export enum LoginAvatarListItem {
-  PERSONAL_CENTER = "个人中心",
-  LOGOUT = "退出登陆",
 }
 
 // 该组件用于显示用户的头像，如果用户没有登录，那么就显示登录注册按钮
