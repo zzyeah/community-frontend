@@ -3,7 +3,8 @@ const path = require("path");
 module.exports = {
   webpack: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      "@": path.resolve(__dirname, "./src"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
     },
     configure: (webpackConfig, { env, paths }) => {
       const isEnvDevelopment = env === "development";

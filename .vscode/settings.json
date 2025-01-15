@@ -3,6 +3,7 @@
         "user",
         "Login",
         "Proxy",
-        "Config"
+        "Config",
+        "Issue"
     ]
 }

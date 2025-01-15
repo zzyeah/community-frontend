@@ -1,11 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {
-  id: number;
-  enabled: number;
-  name: string;
-  avatar: string;
-  loginId: string;
+  id: string;
+  loginId: string; // 账号
+  name: string; // 昵称
+  avatar: string; // 头像
+  permission?: number; // 暂时不需要权限
+  mail?: string; // 邮箱
+  qq?: string; // QQ
+  wechat?: string; // 微信号
+  intro?: string; // 个人介绍
+  registerDate: number; // 注册时间
+  lastLoginDate: number; // 上次登录事件
+  points: number; // 积分
+  enabled: number; // 是否可用
 }
 
 export interface UserState {

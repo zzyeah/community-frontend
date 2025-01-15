@@ -6,21 +6,21 @@ import {
   responseTokenInterceptor,
 } from "./interceptors/token.interceptor";
 
-const service = axios.create({
+const apiCall = axios.create({
   timeout: 5000,
   method: "GET",
 });
 
 // request Interceptors
-service.interceptors.request.use(
+apiCall.interceptors.request.use(
   requestTokenInterceptor,
   requestTokenErrorInterceptor
 );
 
 // response Interceptors
-service.interceptors.response.use(
+apiCall.interceptors.response.use(
   responseTokenInterceptor,
   responseTokenErrorInterceptor
 );
 
-export default service;
+export default apiCall;

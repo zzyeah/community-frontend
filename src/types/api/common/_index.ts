@@ -1,1 +1,1 @@
-export * from "./commonResponse.interface";
+export * from "./common.response";
