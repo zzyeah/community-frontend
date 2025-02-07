@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { editUser } from "@/api/user";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {
   id: string;
@@ -29,6 +30,14 @@ export interface UserCaseReducers {
 }
 
 export const UserName = "user";
+export const updateUserInfoAsync = createAsyncThunk(
+  `${UserName}/editUser`,
+  async (payload: { userId: string; newInfo: Partial<UserInfo> }) => {
+    const { newInfo, userId } = payload;
+    const result = await editUser(userId, newInfo);
+    return result.data;
+  }
+);
 
 const userSlice = createSlice<
   UserState,
@@ -54,9 +63,22 @@ const userSlice = createSlice<
     clearUserInfo: (state) => {
       state.userInfo = null;
     },
+    // 更新用户信息
+    updateUserInfo: (state) => {},
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateUserInfoAsync.fulfilled, (state, { payload }) => {
+      console.log(state);
+      console.log(payload);
+      state.userInfo = payload;
+    });
   },
 });
 
-export const { initUserInfo, changeLoginStatus, clearUserInfo } =
-  userSlice.actions;
+export const {
+  initUserInfo,
+  changeLoginStatus,
+  clearUserInfo,
+  updateUserInfo,
+} = userSlice.actions;
 export default userSlice.reducer;

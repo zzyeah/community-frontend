@@ -1,3 +1,6 @@
+import { TypeInfo } from "@/types/type/typeInfo.interface";
+import { Select as AntdSelect } from "antd";
+
 export enum FormDatePart {
   year = "year",
   time = "time",
@@ -84,4 +87,21 @@ export function formatDate(timestamp: string, part?: FormDatePart) {
   }
 
   return str;
+}
+
+/**
+ * 批量生成下拉列表的 options
+ */
+export function typeOptionCreator(
+  Select: typeof AntdSelect,
+  typeList: TypeInfo[]
+) {
+  const { Option: SelectOption } = Select;
+  return typeList.map((type) => {
+    return (
+      <SelectOption key={type.id} value={type.id}>
+        {type.typeName}
+      </SelectOption>
+    );
+  });
 }

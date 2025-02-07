@@ -7,7 +7,7 @@ import {
 } from "./interceptors/token.interceptor";
 
 const apiCall = axios.create({
-  timeout: 5000,
+  timeout: 50000,
   method: "GET",
 });
 

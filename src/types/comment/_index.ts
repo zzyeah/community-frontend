@@ -1,0 +1,1 @@
+export * from "./commentInfo.interface";

@@ -60,3 +60,14 @@ export function getUserByPointsRank(): Promise<
     url: "/api/user/pointsRank",
   });
 }
+
+/**
+ * 根据 id 修改用户
+ */
+export function editUser(userId: string, newUserInfo: Partial<UserInfo>){
+  return apiCall({
+    url : `/api/user/${userId}`,
+    method : "patch",
+    data : newUserInfo
+  })
+}

@@ -1,8 +1,9 @@
 import { getType } from "@/api/type";
+import { TypeInfo } from "@/types/type/typeInfo.interface";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface TypeState {
-  typeList: any[];
+  typeList: TypeInfo[];
 }
 
 export interface TypeCaseReducers {

@@ -7,7 +7,7 @@ import { GetIssueByPageRequest } from "@/types/api/issue/getIssueByPage.request"
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import IssueItem from "@/components/IssueItem";
 import { Pagination } from "antd";
-import AddIssue from "@/components/AddIssueBtn";
+import AddIssueBtn from "@/components/AddIssueBtn";
 import Recommend from "@/components/Recommend";
 import ScoreRank from "@/components/ScoreRank";
 
@@ -88,7 +88,7 @@ function Issues(props: IssuesProps) {
         </div>
         {/* 右边区域 */}
         <div className={styles.rightSide}>
-          <AddIssue />
+          <AddIssueBtn />
           <div
             style={{
               marginBottom: "30px",

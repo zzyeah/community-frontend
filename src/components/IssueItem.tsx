@@ -7,6 +7,9 @@ import { getUserById } from "@/api/user";
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import { getTypeList, TypeState } from "@/redux/type/typeSlice";
 import { UserInfo } from "@/redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { RoutePaths } from "@/types/router/routePaths.enum";
+import { PathUtils } from "@/utils/route.utils";
 
 export interface IssueItemProps {
   issueInfo: IssueList;
@@ -17,6 +20,7 @@ export interface IssueItemProps {
  */
 function IssueItem(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { typeList } = useSelector<{ type: TypeState }, TypeState>(
     (state) => state.type
   );
@@ -45,6 +49,13 @@ function IssueItem(props) {
     fetchData();
   }, [dispatch, props.issueInfo.userId, typeList.length]);
 
+  function handleClickTitle() {
+    const path = new PathUtils([RoutePaths.IssueDetail]).replacePath([
+      props.issueInfo.id,
+    ]);
+    navigate(path.getPath());
+  }
+
   return (
     <div className={styles.container}>
       {/* 问答数 */}
@@ -59,7 +70,9 @@ function IssueItem(props) {
       </div>
       {/* 问题内容 */}
       <div className={styles.issueContainer}>
-        <div className={styles.top}>{props.issueInfo.issueTitle}</div>
+        <div className={styles.top} onClick={handleClickTitle}>
+          {props.issueInfo.issueTitle}
+        </div>
         <div className={styles.bottom}>
           <div className={styles.left}>
             <Tag
