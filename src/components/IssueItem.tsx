@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "@/styles/IssueItem.module.css";
 import { formatDate, FormDatePart } from "@/utils/tools";
 import { useDispatch, useSelector } from "react-redux";
-import { Tag } from "antd";
 import { getUserById } from "@/api/user";
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import { getTypeList, TypeState } from "@/redux/type/typeSlice";
@@ -10,6 +9,7 @@ import { UserInfo } from "@/redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "@/types/router/routePaths.enum";
 import { PathUtils } from "@/utils/route.utils";
+import ZyTag from "./ZyTag";
 
 export interface IssueItemProps {
   issueInfo: IssueList;
@@ -25,16 +25,6 @@ function IssueItem(props) {
     (state) => state.type
   );
   const [userInfo, setUserInfo] = useState<UserInfo>();
-  const colorArr = [
-    "#108ee9",
-    "#2db7f5",
-    "#f50",
-    "green",
-    "#87d068",
-    "blue",
-    "red",
-    "purple",
-  ];
 
   useEffect(() => {
     if (!typeList.length) {
@@ -75,20 +65,20 @@ function IssueItem(props) {
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>
-            <Tag
-              color={
-                colorArr[
+            <ZyTag
+              zyColor={(colorArr) => {
+                return colorArr[
                   typeList.findIndex(
                     (type) => type.id === props.issueInfo.typeId
                   ) % colorArr.length
-                ]
-              }
+                ];
+              }}
             >
               {props.issueInfo.type.typeName}
-            </Tag>
+            </ZyTag>
           </div>
           <div className={styles.right}>
-            <Tag color="volcano">{userInfo?.name}</Tag>
+            <ZyTag color="volcano">{userInfo?.name}</ZyTag>
             <span>
               {formatDate(props.issueInfo.issueDate, FormDatePart.year)}
             </span>
