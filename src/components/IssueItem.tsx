@@ -18,7 +18,7 @@ export interface IssueItemProps {
 /**
  * 问答项
  */
-function IssueItem(props) {
+function IssueItem(props:IssueItemProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { typeList } = useSelector<{ type: TypeState }, TypeState>(

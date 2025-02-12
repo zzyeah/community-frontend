@@ -5,5 +5,7 @@ export enum RoutePaths {
   IssueTest = `/aaa/:test`,
   Books = "/books",
   Interviews = "/interviews",
+  searchPage = "/searchPage",
   Home = "/",
+
 }

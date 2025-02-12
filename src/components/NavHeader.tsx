@@ -1,20 +1,49 @@
 import { Input, Select, Space } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LoginAvatar from "./LoginAvatar";
+import { RoutePaths } from "@/types/router/routePaths.enum";
+import { useState } from "react";
+import { SearchOptions } from "@/types/common/searchOptions.enum";
 const { Search } = Input;
+
 const options = [
   {
-    value: "issue",
+    value: SearchOptions.Issue,
     label: "问答",
   },
   {
-    value: "book",
+    value: SearchOptions.Book,
     label: "书籍",
   },
 ];
 function NavHeader(props) {
+  const [searchOption, setSearchOption] = useState<SearchOptions>(
+    SearchOptions.Issue
+  );
+  const navigate = useNavigate();
+  function onSearch(
+    value: string,
+    event,
+    { source }: { source: "input" | "clear" }
+  ) {
+    if (!value) {
+      if (source === "clear") {
+        return;
+      }
+      // 跳转首页
+      navigate(RoutePaths.Home);
+    }
+    if (value) {
+      navigate(RoutePaths.searchPage, {
+        state: { value, searchOption },
+      });
+    }
+  }
 
-  
+  function selectOnChange(value: SearchOptions) {
+    setSearchOption(value);
+  }
+
   return (
     <div className="headerContainer">
       {/* 头部logo */}
@@ -45,10 +74,11 @@ function NavHeader(props) {
       <div className="searchContainer">
         <Space.Compact>
           <Select
-            defaultValue="issue"
+            defaultValue={SearchOptions.Issue}
             options={options}
             size="large"
             style={{ width: "20%" }}
+            onChange={selectOnChange}
           />
           <Search
             placeholder="请输入要搜索的内容"
@@ -58,12 +88,13 @@ function NavHeader(props) {
             style={{
               width: "80%",
             }}
+            onSearch={onSearch}
           />
         </Space.Compact>
       </div>
       {/* 登陆按钮 */}
       <div className="loginBtnContainer">
-        <LoginAvatar loginHandle={props.loginHandle}/>
+        <LoginAvatar loginHandle={props.loginHandle} />
       </div>
     </div>
   );
