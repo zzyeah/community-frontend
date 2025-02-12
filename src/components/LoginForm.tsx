@@ -13,7 +13,7 @@ import {
   Row,
 } from "antd";
 import { useEffect, useState } from "react";
-import { getCaptcha, login, register, userIsExist } from "../api/user";
+import { getCaptcha, login, register, userIsExist } from "../api/user/user.api";
 import styles from "@/styles/LoginForm.module.css";
 import { RuleObject } from "antd/es/form";
 import { StoreValue } from "antd/es/form/interface";

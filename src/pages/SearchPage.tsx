@@ -8,7 +8,7 @@ import ScoreRank from "@/components/ScoreRank";
 import { IQueryByPageRequest } from "@/types/api/common/queryByPage.request";
 import { IQueryByPageResponse } from "@/types/api/common/queryByPage.response";
 import { GetIssueByPageRequest } from "@/types/api/issue/getIssueByPage.request";
-import { getIssueByPage } from "@/api/issue";
+import { getIssueByPage } from "@/api/issue/issue.api";
 import { SearchOptions } from "@/types/common/searchOptions.enum";
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import SearchResultItem from "@/components/SearchResultItem";

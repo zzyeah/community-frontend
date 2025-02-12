@@ -7,7 +7,7 @@ import { getTypeList, TypeState } from "@/redux/type/typeSlice";
 import { typeOptionCreator } from "@/utils/tools";
 import { AddIssueRequest } from "@/types/api/addIssue/addIssue.request";
 import { UserState } from "@/redux/user/userSlice";
-import { addIssue } from "@/api/issue";
+import { addIssue } from "@/api/issue/issue.api";
 import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "@/types/router/routePaths.enum";
 import ZyEditor from "@/components/ZyEditor";

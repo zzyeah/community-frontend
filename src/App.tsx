@@ -5,7 +5,7 @@ import PageFooter from "./components/PageFooter";
 import { Layout, message } from "antd";
 import RouteConfig from "./router";
 import LoginForm from "./components/LoginForm";
-import { getInfo, getUserById } from "./api/user";
+import { getInfo, getUserById } from "./api/user/user.api";
 import { Local_Authorization } from "./types/localStorage/keys.constant";
 import { useDispatch } from "react-redux";
 import { changeLoginStatus, initUserInfo } from "./redux/user/userSlice";

@@ -1,4 +1,4 @@
-import { getType } from "@/api/type";
+import { getType } from "@/api/type/type.api";
 import { TypeInfo } from "@/types/type/typeInfo.interface";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 

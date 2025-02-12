@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "@styles/Issue.module.css";
 import PageHeader from "@/components/PageHeader";
 import { IQueryByPageRequest } from "@/types/api/common/queryByPage.request";
-import { getIssueByPage } from "@/api/issue";
+import { getIssueByPage } from "@/api/issue/issue.api";
 import { GetIssueByPageRequest } from "@/types/api/issue/getIssueByPage.request";
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import IssueItem from "@/components/IssueItem";

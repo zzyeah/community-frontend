@@ -1,4 +1,4 @@
-import { getIssueById } from "@/api/issue";
+import { getIssueById } from "@/api/issue/issue.api";
 import { IssueInfo } from "@/types/issue/issueInfo.interface";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

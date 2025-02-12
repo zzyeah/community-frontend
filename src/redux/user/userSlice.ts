@@ -1,4 +1,4 @@
-import { editUser } from "@/api/user";
+import { editUser } from "@/api/user/user.api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "@/styles/IssueItem.module.css";
 import { formatDate, FormDatePart } from "@/utils/tools";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserById } from "@/api/user";
+import { getUserById } from "@/api/user/user.api";
 import { IssueList } from "@/types/api/issue/getIssueByPage.response";
 import { getTypeList, TypeState } from "@/redux/type/typeSlice";
 import { UserInfo } from "@/redux/user/userSlice";

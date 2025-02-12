@@ -1,4 +1,4 @@
-import { getUserByPointsRank } from "@/api/user";
+import { getUserByPointsRank } from "@/api/user/user.api";
 import React, { useEffect, useState } from "react";
 import ScoreItem from "./ScoreItem";
 import { UserPointsRankInfo } from "@/types/api/user/getUserByPointsRank.response";
