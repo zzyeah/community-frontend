@@ -9,6 +9,7 @@ import { getInfo, getUserById } from "./api/user/user.api";
 import { Local_Authorization } from "./types/localStorage/keys.constant";
 import { useDispatch } from "react-redux";
 import { changeLoginStatus, initUserInfo } from "./redux/user/userSlice";
+import RouteBefore from "./router/RouteBefore";
 
 const { Header, Content, Footer } = Layout;
 
@@ -55,7 +56,7 @@ function App() {
       </Header>
       {/* 路由页面 */}
       <Content className="content">
-        <RouteConfig></RouteConfig>
+        <RouteBefore />
       </Content>
       {/* 底部 */}
       <Footer className="footer">

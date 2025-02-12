@@ -6,6 +6,7 @@
         "Config",
         "Issue",
         "Type",
-        "Interview"
+        "Interview",
+        "Router"
     ]
 }
