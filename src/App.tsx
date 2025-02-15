@@ -3,7 +3,7 @@ import "./styles/App.css";
 import NavHeader from "./components/NavHeader";
 import PageFooter from "./components/PageFooter";
 import { Layout, message } from "antd";
-import RouteConfig from "./router";
+import RouteConfig from "./router/route";
 import LoginForm from "./components/LoginForm";
 import { getInfo, getUserById } from "./api/user/user.api";
 import { Local_Authorization } from "./types/localStorage/keys.constant";

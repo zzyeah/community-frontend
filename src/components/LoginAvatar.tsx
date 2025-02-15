@@ -11,6 +11,7 @@ import styles from "../styles/LoginAvatar.module.css";
 import { Local_Authorization } from "@/_index";
 import { useNavigate } from "react-router-dom";
 import { LoginAvatarListItem } from "@/types/loginAvatar/loginAvatarItemList.enum";
+import { RoutePaths } from "@/types/router/routePaths.enum";
 
 export interface LoginAvatarProps {
   loginHandle: () => void;
@@ -27,6 +28,7 @@ function LoginAvatar(props: LoginAvatarProps) {
   function listClickHandle(item: LoginAvatarListItem) {
     switch (item) {
       case LoginAvatarListItem.PERSONAL_CENTER:
+        navigate(RoutePaths.Personal);
         break;
       case LoginAvatarListItem.LOGOUT:
         // 退出登陆
@@ -36,7 +38,7 @@ function LoginAvatar(props: LoginAvatarProps) {
         dispatch(clearUserInfo());
         dispatch(changeLoginStatus(false));
         // 跳转回 /
-        navigate("/");
+        navigate(RoutePaths.Home);
         break;
     }
   }

@@ -10,11 +10,13 @@ export interface UserInfo {
   mail?: string; // 邮箱
   qq?: string; // QQ
   wechat?: string; // 微信号
+  github?: string; // 微信号
   intro?: string; // 个人介绍
   registerDate: number; // 注册时间
   lastLoginDate: number; // 上次登录事件
   points: number; // 积分
   enabled: number; // 是否可用
+  loginPwd?: string;
 }
 
 export interface UserState {

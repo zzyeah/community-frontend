@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import RouteConfig from ".";
+import RouteConfig from "./route";
 import routeBeforeConfig from "./RouteBeforeConfig";
 import { Local_Authorization } from "@/types/localStorage/keys.constant";
 import { Alert } from "antd";

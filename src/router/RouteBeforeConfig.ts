@@ -23,7 +23,7 @@ const routeBeforeConfig: RouteBeforeConfig[] = [
     needLogin: false,
   },
   {
-    path: RoutePaths.searchPage,
+    path: RoutePaths.SearchPage,
     needLogin: false,
   },
   { path: RoutePaths.Personal, needLogin: true },

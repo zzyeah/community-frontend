@@ -4,7 +4,7 @@ export enum RoutePaths {
   IssueDetail = `${RoutePaths.Issue}/:issueId`,
   Books = "/books",
   Interviews = "/interviews",
-  searchPage = "/searchPage",
+  SearchPage = "/searchPage",
   Personal = "/personal",
   Home = "/",
 }

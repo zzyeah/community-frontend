@@ -5,6 +5,7 @@ import { IUserRegisterRequest } from "@/types/api/user/userRegister.request";
 import { IWhoamiResponse } from "@/types/api/user/whoami.response";
 import { CommonResponse } from "@/types/api/common/common.response";
 import { GetUserByPointsRankResponse } from "@/types/api/user/getUserByPointsRank.response";
+import { UserCheckPwdRequest } from "@/types/api/user/userCheckPwd.request";
 
 export function getCaptcha(): Promise<string> {
   return apiCall({
@@ -64,10 +65,23 @@ export function getUserByPointsRank(): Promise<
 /**
  * 根据 id 修改用户
  */
-export function editUser(userId: string, newUserInfo: Partial<UserInfo>){
+export function editUser(userId: string, newUserInfo: Partial<UserInfo>) {
   return apiCall({
-    url : `/api/user/${userId}`,
-    method : "patch",
-    data : newUserInfo
-  })
+    url: `/api/user/${userId}`,
+    method: "patch",
+    data: newUserInfo,
+  });
+}
+
+/**
+ * 验证用户账号密码是否正确
+ */
+export function checkPassword(
+  request: UserCheckPwdRequest
+): Promise<CommonResponse<boolean>> {
+  return apiCall({
+    url: "/api/user/passwordcheck",
+    method: "POST",
+    data: request,
+  });
 }

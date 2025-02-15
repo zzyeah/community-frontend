@@ -34,7 +34,7 @@ function NavHeader(props) {
       navigate(RoutePaths.Home);
     }
     if (value) {
-      navigate(RoutePaths.searchPage, {
+      navigate(RoutePaths.SearchPage, {
         state: { value, searchOption },
       });
     }
